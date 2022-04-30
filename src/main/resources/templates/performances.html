@@ -1,0 +1,107 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<div xmlns:th="http://www.thymeleaf.org">
+    <section class="jumbotron text-center">
+        <div class="container">
+
+            <a style="float: right" th:href="@{'/reservation-ticket' }"  >Reservation Ticket</a>
+            <br>
+            <h1 class="jumbotron-heading">Cultural Centre </h1>
+            <h3 class="jumbotron-heading">Performances</h3>
+        </div>
+    </section>
+
+    <form id="filter-form">
+        <label for="date">Date</label>
+        <input id="date" type="text" name="date"/>
+
+
+        <!-- For each event type you should have one <option> like below  -->
+        <button id="filter" type="submit">Filter</button>
+    </form>
+
+
+
+    <div class="container mb-4">
+        <div class="row">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Performance</th>
+                            <th scope="col">Performance name</th>
+                            <th scope="col">Date</th>
+
+                            <th scope="col">Price</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Director</th>
+                            <th scope="col">Likes</th>
+                            <th scope="col"></th>
+
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="performance : ${performances}" class="performance">
+                            <td><img style="width: 100px; height: 150px" th:src="${performance.getImageUrl()}"></img></td>
+                            <td th:text="${performance.getName()}"></td>
+                            <td th:text="${performance.getDate()}"></td>
+
+                            <td th:text="${performance.getPrice()}"></td>
+                            <td th:text="${performance.getType() != null}
+                            ? ${performance.getType().toString()} : 'No Type'"></td>
+                            <td th:text="${performance.getDirector() != null}
+                            ? ${performance.getDirector().getName()} : 'No Director'"></td>
+                            <td th:text="${performance.likes}">[performance.likes]</td>
+
+                            <td class="text-right">
+
+                                <form th:method="post" th:action="@{'/performances/{id}/delete' (id=${performance.id})}"
+                                      sec:authorize="hasRole('ROLE_ADMIN')">
+                                    <button type="submit" class="delete-item">Delete</button>
+                                </form>
+                                <a th:href="@{'/performances/{id}/edit-form' (id=${performance.getId()})}" class="edit-item"
+                                   sec:authorize="hasRole('ROLE_ADMIN')">Edit</a>
+
+                                <form th:method="post" th:action="@{'/performances/{id}/like' (id=${performance.id})}"
+                                      sec:authorize="hasRole('ROLE_USER')">
+                                    <button type="submit" class="like-item">Like </button>
+                                </form>
+
+                                <form th:action="@{'/reservation-ticket/{id}/add-performance' (id=${performance.getId()})}"
+                                      th:method="POST"
+                                      >
+                                    <button type="submit"
+                                            class="btn btn-sm btn-primary ticket-movie">
+                                        <i class="fa fa-trash">Add  to reservation ticket</i>
+                                    </button>
+                                </form>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            <div class="col mb-3">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a href="/performances/add-form" class="btn btn-block btn-dark add-performance-btn">
+                            Add new performance
+                        </a><br>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <a type="button" class="btn btn-primary" th:href="@{'/movies' }">Movies</a>
+        <a type="button" class="btn btn-primary" th:href="@{'/arts' }">Arts</a>
+
+
+        <a type="button" class="btn btn-primary" th:href="@{'/home' }">Home</a>
+
+    </div>
+</div>

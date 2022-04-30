@@ -1,0 +1,109 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<th:block xmlns:th="http://www.thymeleaf.org">
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">Cultural Centre </h1>
+      <h3 class="jumbotron-heading">Reservation TIcket for
+        <th:block th:if="${#request.getRemoteUser() != null}" th:text="${#request.getRemoteUser()}"></th:block>
+      </h3>
+    </div>
+  </section>
+
+  <div th:if="${hasError}">
+    <h5 class="text-center text-danger" th:text="${error}"></h5>
+  </div>
+
+  <div class="container mb-4">
+    <div class="row">
+      <div class="col-12" th:if="${movies.size() > 0}">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th scope="col">Movie</th>
+              <th scope="col">Movie name</th>
+
+              <th scope="col">Date</th>
+              <th scope="col">Price</th>
+              <th scope="col">Type</th>
+              <th scope="col">Director</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="movie : ${movies}" class="cart-item">
+              <td><img style="width: 100px; height: 150px" th:src="${movie.getImageUrl()}"></img></td>
+
+              <td th:text="${movie.getName()}"></td>
+              <td th:text="${movie.getDate()}"></td>
+              <td th:text="${movie.getPrice()}"></td>
+              <td th:text="${movie.getType() != null} ? ${movie.getType().toString()} : 'No Type'"></td>
+              <td th:text="${movie.getDirector() != null} ? ${movie.getDirector().getName()} : 'No Director'"></td>
+              <td>
+                <a type="button" class="btn btn-primary" th:href="@{'/movies' }" >Delete ticket</a>
+
+              </td>
+
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12" th:if="${performances.size() > 0}">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th scope="col">Performance</th>
+              <th scope="col">Performance name</th>
+              <th scope="col">Date</th>
+
+              <th scope="col">Price</th>
+              <th scope="col">Type</th>
+              <th scope="col">Director</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="performance : ${performances}" class="cart-item">
+              <td><img style="width: 100px; height: 150px" th:src="${performance.getImageUrl()}"></img></td>
+
+              <td th:text="${performance.getName()}"></td>
+              <td th:text="${performance.getDate()}"></td>
+
+              <td th:text="${performance.getPrice()}"></td>
+              <td th:text="${performance.getType() != null} ? ${performance.getType().toString()} : 'No Type'"></td>
+              <td th:text="${performance.getDirector() != null} ? ${performance.getDirector().getName()} : 'No Director'"></td>
+              <td >
+                <a type="button" class="btn btn-primary" th:href="@{'/performances' }" >Delete ticket</a>
+
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <a type="button" class="btn btn-primary" th:href="@{'/home' }">RESERVE</a>
+
+      </div>
+
+
+    </div>
+
+    <a type="button" class="btn btn-primary" th:href="@{'/movies' }">Movies</a>
+
+    <a type="button" class="btn btn-primary" th:href="@{'/performances' }">Performances</a>
+    <a type="button" class="btn btn-primary" th:href="@{'/arts' }">Arts</a>
+
+
+    <a type="button" class="btn btn-primary" th:href="@{'/home' }">Home</a>
+
+  </div>
+</th:block>
+
+
+
+
